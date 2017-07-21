@@ -2,12 +2,12 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.mycompany</groupId>
-  <artifactId>camel-spring</artifactId>
+  <groupId>br.com.code.sorcerers</groupId>
+  <artifactId>camel-socket</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
-  <name>Camel Spring Quickstart</name>
-  <description>Empty Camel Spring Example</description>
+  <name>Camel Socket</name>
+  <description>Camel Socket Example</description>
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -16,9 +16,9 @@
     </license>
   </licenses>
   <properties>
-    <camel.version>2.19.1</camel.version>
-    <version.maven-bundle-plugin>2.3.7</version.maven-bundle-plugin>
+    <camel.version>2.17.0.redhat-630187</camel.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <version.maven-bundle-plugin>2.3.7</version.maven-bundle-plugin>
     <jboss.fuse.bom.version>6.3.0.redhat-187</jboss.fuse.bom.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -37,12 +37,10 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-core</artifactId>
-      <version>2.17.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-spring</artifactId>
-      <version>2.17.3</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -59,7 +57,18 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-test-spring</artifactId>
-      <version>2.17.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-netty-http</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-spark-rest</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-swagger-java</artifactId>
     </dependency>
   </dependencies>
   <repositories>
@@ -125,7 +134,9 @@
         <configuration>
           <instructions>
             <Bundle-SymbolicName>camel-socket</Bundle-SymbolicName>
-            <Bundle-Name>Empty Camel Spring Example [camel-socket]</Bundle-Name></instructions></configuration>
+            <Bundle-Name>Camel Socket Example [camel-socket]</Bundle-Name>
+          </instructions>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

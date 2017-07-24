@@ -22,7 +22,12 @@ public class RestRoute extends RouteBuilder {
 		
 		rest()
 			.post("/socket")
-		.toD("");
+		.toD("direct:teste");
+		
+		from("direct:teste")
+			.setBody(simple("TESTE BODY"))
+			.to("log:foo")
+		.end();
 	}
 
 }

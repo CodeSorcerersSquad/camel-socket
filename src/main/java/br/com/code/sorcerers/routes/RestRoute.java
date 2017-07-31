@@ -1,12 +1,12 @@
 package br.com.code.sorcerers.routes;
 
-import java.io.IOException;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RestRoute extends RouteBuilder {
 
 	@Override
@@ -19,7 +19,7 @@ public class RestRoute extends RouteBuilder {
 		// Itera o array de URIS para poder montar os caminhos desejados de socket
 		for(int i = 0; i < uris.length; i++) {
 			StringBuilder path = new StringBuilder("netty4-http:http://");
-			path.append(uris[i]);//.append("?textline=true&synchronous=").append(String.valueOf(sync)).append("&clientMode=true");
+			path.append(uris[i]);
 			nettyList[i] = path.toString();
 		}
 		
@@ -37,10 +37,10 @@ public class RestRoute extends RouteBuilder {
 		
 		rest()
 			.post("/socket")
-		.toD("direct:teste");
+		.toD("seda:distribuidor");
 		
-		from("seda:distribuidor")
-			.log("${body}")
+		from("seda:distribuidor").streamCaching()
+			
 			.process(new Processor() {
 				
 				@Override
@@ -50,11 +50,15 @@ public class RestRoute extends RouteBuilder {
 			})
 			.loadBalance()
 			.hystrix()
-			// TODO
+				.hystrixConfiguration()
+		            .executionTimeoutInMilliseconds(5000).circuitBreakerSleepWindowInMilliseconds(10000)
+		       .end()
+//		       .inOut(nettyList)
+			.onFallback()
+				.setBody(simple("ERROR!!"))
+			.end()
 			
-			
-			
-			.inOut(nettyList)
+			.log("${body}")
 		.end();
 	}
 

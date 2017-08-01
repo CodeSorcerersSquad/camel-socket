@@ -107,7 +107,8 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<defaultGoal>install</defaultGoal>
+		<!--<defaultGoal>install</defaultGoal>-->
+		<defaultGoal>spring-boot:run</defaultGoal>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.felix</groupId>

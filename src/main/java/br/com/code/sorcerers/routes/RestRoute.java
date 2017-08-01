@@ -53,6 +53,8 @@ public class RestRoute extends RouteBuilder {
 			.apiProperty("api.version", "1.0.0").apiProperty("cors", "true");
 		
 		rest()
+			.produces("application/json")
+			.consumes("application/json")
 			.post("/socket")
 		.toD("seda:distribuidor");
 		
@@ -65,13 +67,13 @@ public class RestRoute extends RouteBuilder {
 					System.out.println("BODY " + exchange.getIn().getBody());
 				}
 			})
-			.loadBalance()
+//			.loadBalance()
 			.hystrix()
 				.hystrixConfiguration()
 		            .executionTimeoutInMilliseconds(5000).circuitBreakerSleepWindowInMilliseconds(10000)
 		       .end()
-//		       .inOut(nettyList)
-		       .log("${body}")
+		       .inOut(nettyList)
+//		       .log("${body}")
 			.onFallback()
 				.setBody(simple("ERROR!!"))
 			.end()

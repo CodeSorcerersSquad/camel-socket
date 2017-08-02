@@ -43,8 +43,7 @@ public class RestRoute extends RouteBuilder {
 		restConfiguration().component("spark-rest")
 			// configuracao de contexto, host e porta
 			.contextPath("/").host(host).port(port)
-			// configuracao de binding para efetuar automaticamente bind
-			// json para pojo
+			// configuracao de binding para efetuar automaticamente bind json para pojo
 			.bindingMode(RestBindingMode.json)
 			// formatar saida com pretty print
 			.dataFormatProperty("prettyPrint", "true")
@@ -67,18 +66,16 @@ public class RestRoute extends RouteBuilder {
 					System.out.println("BODY " + exchange.getIn().getBody());
 				}
 			})
-//			.loadBalance()
 			.hystrix()
 				.hystrixConfiguration()
 		            .executionTimeoutInMilliseconds(5000).circuitBreakerSleepWindowInMilliseconds(10000)
 		       .end()
 		       .inOut(nettyList)
-//		       .log("${body}")
 			.onFallback()
 				.setBody(simple("ERROR!!"))
 			.end()
 			
-			.to("log:foo")
+//			.to("log:foo")
 		.end();
 	}
 

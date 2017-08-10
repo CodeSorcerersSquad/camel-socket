@@ -4,7 +4,10 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class RestRoute extends RouteBuilder {
@@ -29,7 +32,7 @@ public class RestRoute extends RouteBuilder {
 			.contextPath("/").host("{{host}}").port("{{port}}")
 			// configuracao de binding para efetuar automaticamente bind
 			// json para pojo
-			.bindingMode(RestBindingMode.json)
+			.bindingMode(RestBindingMode.off)
 			// formatar saida com pretty print
 			.dataFormatProperty("prettyPrint", "true")
 			// adicao de swagger api-doc
@@ -48,15 +51,18 @@ public class RestRoute extends RouteBuilder {
 				
 				@Override
 				public void process(Exchange exchange) throws Exception {
+					JSONObject jsonObject = new JSONObject(exchange.getIn().getBody(Map.class));
+					jsonObject.put("name", "TESTE NOME MUDADO");
 					System.out.println("BODY " + exchange.getIn().getBody());
+					exchange.getOut().setBody(jsonObject);
 				}
 			})
 			.hystrix()
 				.hystrixConfiguration()
 		            .executionTimeoutInMilliseconds(5000).circuitBreakerSleepWindowInMilliseconds(10000)
 		       .end()
-		       .inOut(nettyList)
-//		       .log("${body}")
+		       //.inOut(nettyList)
+		       .log("${body}")
 			.onFallback()
 				.setBody(simple("ERROR!!"))
 			.end()

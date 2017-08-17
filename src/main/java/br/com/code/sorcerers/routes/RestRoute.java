@@ -7,8 +7,6 @@ import org.apache.camel.model.rest.RestBindingMode;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 @Component
 public class RestRoute extends RouteBuilder {
 	
@@ -51,10 +49,11 @@ public class RestRoute extends RouteBuilder {
 				
 				@Override
 				public void process(Exchange exchange) throws Exception {
-					JSONObject jsonObject = new JSONObject(exchange.getIn().getBody(Map.class));
-					jsonObject.put("name", "TESTE NOME MUDADO");
-					System.out.println("BODY " + exchange.getIn().getBody());
-					exchange.getOut().setBody(jsonObject);
+					String body = exchange.getIn().getBody(String.class);
+					JSONObject jsonObject = new JSONObject(body);
+					jsonObject.put("name", "TESTE MUDADO");
+					System.out.println("BODY " + jsonObject.toString());
+					exchange.getOut().setBody(jsonObject.toString());
 				}
 			})
 			.hystrix()

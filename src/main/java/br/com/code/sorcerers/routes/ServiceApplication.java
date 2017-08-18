@@ -11,6 +11,10 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 //import org.springframework.web.filter.CharacterEncodingFilter;
 
+/**
+ * @author victor
+ *
+ */
 
 @SpringBootApplication
 @ImportResource({ "classpath:META-INF/spring/camel-context.xml" })

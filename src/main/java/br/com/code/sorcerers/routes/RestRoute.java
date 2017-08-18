@@ -1,30 +1,21 @@
 package br.com.code.sorcerers.routes;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
-import org.json.JSONObject;
 import org.springframework.stereotype.Component;
+
+/**
+ * @author victor
+ *
+ */
 
 @Component
 public class RestRoute extends RouteBuilder {
-	
+
+
 	@Override
 	public void configure() throws Exception {
-		
-		// Pega a as URIS e separa em um array dividido por virgula
-		String[] uris = getContext().resolvePropertyPlaceholders("{{addresses}}").split(",");
-		String[] nettyList = new String[uris.length];
-		
-		// Itera o array de URIS para poder montar os caminhos desejados de socket
-		for(int i = 0; i < uris.length; i++) {
-			StringBuilder path = new StringBuilder("netty4-http:http://");
-			path.append(uris[i]);
-			nettyList[i] = path.toString();
-			System.out.println(nettyList[i]);
-		}
-		
+
 		restConfiguration().component("spark-rest")
 			// configuracao de contexto, host e porta
 			.contextPath("/").host("{{host}}").port("{{port}}")
@@ -43,31 +34,7 @@ public class RestRoute extends RouteBuilder {
 			.post("/socket")
 		.toD("seda:distribuidor");
 		
-		from("seda:distribuidor").streamCaching()
-			
-			.process(new Processor() {
-				
-				@Override
-				public void process(Exchange exchange) throws Exception {
-					String body = exchange.getIn().getBody(String.class);
-					JSONObject jsonObject = new JSONObject(body);
-					jsonObject.put("name", "TESTE MUDADO");
-					System.out.println("BODY " + jsonObject.toString());
-					exchange.getOut().setBody(jsonObject.toString());
-				}
-			})
-			.hystrix()
-				.hystrixConfiguration()
-		            .executionTimeoutInMilliseconds(5000).circuitBreakerSleepWindowInMilliseconds(10000)
-		       .end()
-		       //.inOut(nettyList)
-		       .log("${body}")
-			.onFallback()
-				.setBody(simple("ERROR!!"))
-			.end()
-			
-			.to("log:foo")
-		.end();
+
 	}
 
 }

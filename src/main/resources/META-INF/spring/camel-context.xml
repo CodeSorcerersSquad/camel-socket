@@ -3,11 +3,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
     <bean class="br.com.code.sorcerers.routes.RestRoute" id="restRoute"/>
-    <bean 
-    class="org.apache.camel.component.properties.PropertiesComponent" id="properties">
-    <property name="location" value="classpath:socket.properties"/>
-    </bean> 
+    <bean class="br.com.code.sorcerers.routes.CreditRoute" id="creditRoute"/>
+    <bean
+        class="org.apache.camel.component.properties.PropertiesComponent" id="properties">
+        <property name="location" value="classpath:socket.properties"/>
+    </bean>
     <camelContext id="_camelContext1" xmlns="http://camel.apache.org/schema/spring">
         <routeBuilder ref="restRoute"/>
+        <routeBuilder ref="creditRoute"/>
     </camelContext>
 </beans>

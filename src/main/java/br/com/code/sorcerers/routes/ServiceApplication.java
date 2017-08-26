@@ -21,6 +21,8 @@ import org.springframework.core.annotation.Order;
 public class ServiceApplication {
 
 	public static void main(String[] args) {
+
+
 		SpringApplication.run(ServiceApplication.class, args);
 	}
 	

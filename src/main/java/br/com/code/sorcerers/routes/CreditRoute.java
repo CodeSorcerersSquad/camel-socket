@@ -20,15 +20,11 @@ public class CreditRoute extends RouteBuilder {
 
         from("seda:distribuidor").streamCaching()
 
-            .process(new Processor() {
-
-                @Override
-                public void process(Exchange exchange) throws Exception {
-                    String body = exchange.getIn().getBody(String.class);
-                    JSONObject jsonObject = new JSONObject(body);
-                    exchange.setProperty("jsonObject", jsonObject);
-                    exchange.getOut().setBody(jsonObject.getInt("score"));
-                }
+            .process(exchange -> {
+                String body = exchange.getIn().getBody(String.class);
+                JSONObject jsonObject = new JSONObject(body);
+                exchange.setProperty("jsonObject", jsonObject);
+                exchange.getOut().setBody(jsonObject.getInt("score"));
             })
 
             .choice()
